@@ -6,21 +6,22 @@ import smtplib
 from email.mime.text import MIMEText
 from email.utils import formataddr
 
-MY_SENDER = 'XXX@163.com'  # 发送邮箱账号
-MY_PASS = '******'  # 邮箱密码
-MY_USER = 'XXX@qq.com'  # 目标邮箱
-SMTP_SERVER_ADDRESS = 'smtp.163.com'  # SMTP服务器的地址
+# 以下的常量，需要自己设置
+MY_SENDER = 'XXX@163.com'  # 用于发送邮件的邮箱的账号
+MY_PASS = '******'  # 用于发送邮件的邮箱的密码
+MY_USER = 'XXX@qq.com'  # 用于接收邮件的邮箱
+# 以下两行在电子邮箱中可以查到，大概在邮箱设置那里
+SMTP_SERVER_ADDRESS = 'smtp.163.com'  # SENDER发送优秀的SMTP服务器的地址
 SMTP_SERVER_PORT = 465  # SMTP服务的端口
 DEFAULT_REPLY = '学习中\n在走路没看到\n吃饭去了\n我洗澡去了\n我不是故意的\n哦\n有点困了\n我先睡了\n手机没电了\n晚安！\n😊\n\n回复【有1吗】召唤'  # 默认回复消息
-OTHER_REPLY = '🈶️，正在赶来的路上。\nJust a moment, please!\n\n🉑️电话/信息👇\n13540609198\n18804502808'  # 转折点后回复的消息
-WARNING_MESSAGE = '🙅‍♂️禁止刷消息🈲\n\n急事通电话👇\n135****9198\n188****2808'  # 警告的消息
-TURNING = '有1吗'  # 转折点消息
-MAX_TIMES_TO_WARNING = 5  # 在转折点后每收到多少次消息后发出警告
-MAX_TIME = 300  # 恢复的时间，单位：秒
+OTHER_REPLY = '🈶️，正在赶来的路上。\nJust a moment, please!\n\n🉑️电话/信息👇\n135****9198\n188****2808'  # 接到指定语句后回复的消息
+WARNING_MESSAGE = '🙅‍♂️禁止刷消息🈲\n\n急事通电话👇\n135****9198\n188****2808'  # 警告禁止刷屏的消息
+TURNING = '有1吗'  # 这里是指定语句，类似‘回复【1】获取XXX’
+MAX_TIMES_TO_WARNING = 5  # 在收到指定语句后每收到多少次消息则发出警告
+MAX_TIME = 300  # 恢复的时间，单位：秒。之后回复默认字段
 
-AutoReplyDict = {
-    'defaultKey': 'defaultValue'
-}  # 若在该字典里面，则五分钟内不自动回复。键为备注值为[次数, 时间]
+# 若在该字典里面，则五分钟内不自动回复。键为备注，值为数组[次数, 时间]
+AutoReplyDict = {'defaultKey': 'defaultValue'}
 
 
 def send_email(remarkName, nickName):
@@ -31,7 +32,8 @@ def send_email(remarkName, nickName):
         msg['To'] = formataddr(["jkzqq", MY_USER])  # 设置收件人的昵称
         emailSubject = "【{}(昵称：{})】发消息了".format(remarkName, nickName)
         msg['Subject'] = emailSubject  # 设置邮件的主题
-        server = smtplib.SMTP_SSL(SMTP_SERVER_ADDRESS, SMTP_SERVER_PORT)  # 设置邮箱SMTP的信息
+        server = smtplib.SMTP_SSL(SMTP_SERVER_ADDRESS,
+                                  SMTP_SERVER_PORT)  # 设置邮箱SMTP的信息
         server.login(MY_SENDER, MY_PASS)  # 登录邮件
         server.sendmail(MY_SENDER, [
             MY_USER,
